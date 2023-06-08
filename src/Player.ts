@@ -176,7 +176,7 @@ export class Player {
       return player.stack;
             console.log("Call Betting: Stack ", player.stack);
     } else {
-            console.log("Call Betting: defaultRaiseAmt ", defaultRaiseAmt);
+            console.log("Call Betting: defaultCallAmt ", defaultCallAmt);
       return defaultCallAmt;
     }
   }
