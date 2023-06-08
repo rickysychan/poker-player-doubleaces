@@ -6,7 +6,7 @@ export class Player {
     } catch(error) {
       console.log('Hole Cards', error);
     }
-    betCallback(200);
+    betCallback(250);
   }
 
   public showdown(gameState: any): void {
