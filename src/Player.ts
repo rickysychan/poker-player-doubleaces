@@ -10,39 +10,43 @@ export class Player {
     console.log('Game State: ', gameState);
     console.log('Hole Cards2', gameState.players.find((e) => e.name === 'DoubleAces').hole_cards);
 
-    var doubleAcePlayer = gameState.players.find((e) => e.name === 'DoubleAces');
-    var hole_cards: Card[] = doubleAcePlayer.hole_cards;
-    var community_cards: Card[] = gameState.community_cards;
-    if (community_cards.length === 0) {
-      if (this.hasPocketPairs(hole_cards)) {
-        var holeRank = hole_cards[0].rank;
-        betCallback(this.betOnPocketPairs(gameState, holeRank));
-        return;
-      }
+    try {
+      var doubleAcePlayer = gameState.players.find((e) => e.name === 'DoubleAces');
+      var hole_cards: Card[] = doubleAcePlayer.hole_cards;
+      var community_cards: Card[] = gameState.community_cards;
+      if (community_cards.length === 0) {
+        if (this.hasPocketPairs(hole_cards)) {
+          var holeRank = hole_cards[0].rank;
+          betCallback(this.betOnPocketPairs(gameState, holeRank));
+          return;
+        }
 
-      if (this.hasHighCard(hole_cards)) {
-        var highCards = hole_cards.filter((card) => FACE_CARDS.includes(card.rank));
-        if (highCards.length === 1) {
-          if (this.areSuited(hole_cards)) {
-            betCallback(this.callAction(gameState));
-          } else {
-            betCallback(0);
+        if (this.hasHighCard(hole_cards)) {
+          var highCards = hole_cards.filter((card) => FACE_CARDS.includes(card.rank));
+          if (highCards.length === 1) {
+            if (this.areSuited(hole_cards)) {
+              betCallback(this.callAction(gameState));
+            } else {
+              betCallback(0);
+            }
+            return;
           }
+
+          if (highCards.length === 2) {
+            betCallback(this.callAction(gameState));
+            return;
+          }
+
+          betCallback(0);
           return;
         }
-
-        if (highCards.length === 2) {
-          betCallback(this.callAction(gameState));
-          return;
-        }
-
-        betCallback(0);
+      } else if (community_cards.length >= 3) {
+        var bet = this.checkAllCards(gameState, hole_cards, community_cards);
+        betCallback(bet);
         return;
       }
-    } else if (community_cards.length >= 3) {
-      var bet = this.checkAllCards(gameState, hole_cards, community_cards);
-      betCallback(bet);
-      return;
+    } catch(err) {
+      console.log(err);
     }
 
     betCallback(250);
