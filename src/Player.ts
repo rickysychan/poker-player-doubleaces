@@ -96,7 +96,12 @@ export class Player {
       return this.getPlayer(gameState).stack;
     }
 
-    return this.callAction(gameState); //TODO: Change this!!!
+    if (this.canAffordBet(gameState)) {
+      betCallback(this.callAction(gameState));
+    } else {
+      betCallback(0);
+    }
+    return;
   }
 
   private getRankToCountMap(cards: Card[]) {
