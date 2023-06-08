@@ -27,9 +27,7 @@ export class Player {
             this.callAction(gameState);
           }
 
-          if (this.areNotSuited(hole_cards)) {
-            betCallback(0);
-          }
+           betCallback(0);
         }
 
         if (highCards.length === 2) {
@@ -92,10 +90,6 @@ export class Player {
   
   public areSuited(hole_cards) {
     return hole_cards[0].suit === hole_cards[1].suit;
-  }
-
-  public areNotSuited(hole_cards) {
-    return hole_cards[0].suit !== hole_cards[1].suit;
   }
 };
 
