@@ -49,34 +49,16 @@ export class Player {
   }
   
   public isFlush(hole_cards: Card[], community_cards: Card[]): boolean {
-    var combination = hole_cards.concat(community_cards);
-    if (combination.length < 5) {
-      return false;
-    }
-
-    this.sortBySuit(combination);
-
-    return combination[0].suit == combination[4].suit;
-  }
-
-  public sortBySuit(cards: Card[]) {
-    var i: number, j: number, min_j: number;
-
-    for (i = 0 ; i < cards.length ; i++) {
-      min_j = i;   // Assume elem i (h[i]) is the minimum
-
-      for (j = i+1 ; j < cards.length; j++) {
-        if ( cards[j].suit < cards[min_j].suit ) {
-          min_j = j;    // We found a smaller suit value, update min_j     
-        }
-      }
-
-      var help = cards[i];
-      cards[i] = cards[min_j];
-      cards[min_j] = help;
-    }
-
-    return cards;
+    const results = arr.reduce((obj, item) => {
+      obj[item.suit] = obj[item.suit] || 0;
+      obj[item.suit]++;       
+      return obj;
+    }, {});
+      
+    return results['spades'] == 5 
+      || results['hearts'] == 5 
+      || results['diamonds'] == 5 
+      || results['clubs'] == 5;
   }
 
   public checkAllCards(gameState: any, hole_cards: Card[], community_cards: Card[]): number {
