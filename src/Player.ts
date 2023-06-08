@@ -97,11 +97,9 @@ export class Player {
     }
 
     if (this.canAffordBet(gameState)) {
-      betCallback(this.callAction(gameState));
-    } else {
-      betCallback(0);
-    }
-    return;
+      return this.callAction(gameState);
+    } 
+    return 0;
   }
 
   private getRankToCountMap(cards: Card[]) {
