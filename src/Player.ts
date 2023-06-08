@@ -42,6 +42,7 @@ export class Player {
     } else if (community_cards.length >= 3) {
       var bet = this.checkAllCards(hole_cards, community_cards);
       betCallback(bet);
+      return;
     }
 
     betCallback(250);
