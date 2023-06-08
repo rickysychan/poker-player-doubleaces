@@ -24,6 +24,13 @@ export class Player {
         if (this.hasHighCard(hole_cards)) {
           var highCards = hole_cards.filter((card) => FACE_CARDS.includes(card.rank));
           if (highCards.length === 1) {
+              if (this.hasOneLowCards(hole_cards)) {
+                if (this.canAffordBet(gameState)) {
+                  betCallback(this.callAction(gameState));
+                } else {
+                  betCallback(0);
+                }
+              }
               betCallback(this.callAction(gameState));
             return;
           }
@@ -194,7 +201,11 @@ export class Player {
   }
   
   public hasLowCards(hole_cards) {
-    return hole_cards[0].rank <= 4 && hole_cards[1].rank <= 4;
+    return hole_cards[0].rank <= 5 && hole_cards[1].rank <= 5;
+  }
+  
+  public hasOneLowCards(hole_cards) {
+    return hole_cards[0].rank <= 5 || hole_cards[1].rank <= 5;
   }
 
   public canAffordBet(gameState) {
