@@ -46,7 +46,7 @@ export class Player {
         return;
       }
     } catch(err) {
-      console.log(err);
+      console.log('!!!ERROR: ', err);
     }
 
     betCallback(250);
