@@ -4,7 +4,7 @@ interface Card {
 }
 
 const FACE_CARDS: string[] = ['10', 'J', 'Q', 'K', 'A'];
-
+  
 export class Player {
   public betRequest(gameState: any, betCallback: (bet: number) => void): void {
     console.log('Game State: ', gameState);
@@ -16,7 +16,7 @@ export class Player {
     if (community_cards.length === 0) {
       if (this.hasPocketPairs(hole_cards)) {
         var holeRank = hole_cards[0].rank;
-        betCallback(this.betOnPocketPairs(holeRank, doubleAcePlayer.stack));
+        betCallback(this.betOnPocketPairs(gameState, holeRank));
         return;
       }
 
@@ -34,7 +34,7 @@ export class Player {
         return;
       }
     }
-    // find max bet of a player and call or bet 250
+
     betCallback(250);
   }
 
@@ -50,16 +50,11 @@ export class Player {
     return FACE_CARDS.includes(cards[0].rank) || FACE_CARDS.includes(cards[1].rank);
   }
 
-  public betOnPocketPairs(holeRank: string, stack: number): number {
-    if (stack === 0) {
-      return 0;
-    }
+  public betOnPocketPairs(gameState: any, holeRank: string): number {
     if (FACE_CARDS.includes(holeRank)) {
-      return stack;
-    } else if (+holeRank > 5 || +holeRank < 10) {
-      return stack / 2;
+      return this.raiseAction(gameState);
     } else {
-      return stack / 4;
+      return this.callAction(gameState)
     }
   }
   
@@ -75,7 +70,14 @@ export class Player {
   }
 
   public callAction(gameState: any) {
-    return gameState.current_buy_in - gameState.players[gameState.in_action][gameState.bet];
+    const defaultCallAmt = gameState.current_buy_in - gameState.players[gameState.in_action][gameState.bet];
+
+    var player = this.getPlayer(gameState);
+    if (defaultCallAmt <= player.stack) {
+      return player.stack;
+    } else {
+      return defaultCallAmt;
+    }
   }
 
   public getPlayer(gameState: any) {
