@@ -46,11 +46,22 @@ export class Player {
   }
   
   public raiseAction(gameState: any) {
-    return gameState.current_buy_in - gameState.players[gameState.in_action][gameState.bet] + gameState.minimum_raise;
+    const defaultRaiseAmt = gameState.current_buy_in - gameState.players[gameState.in_action][gameState.bet] + gameState.minimum_raise;
+    
+    var player = this.getPlayer(gameState);
+    if (defaultRaiseAmt <= player.stack) {
+      return player.stack;
+    } else {
+      return defaultRaiseAmt;
+    }
   }
 
   public callAction(gameState: any) {
     return gameState.current_buy_in - gameState.players[gameState.in_action][gameState.bet];
+  }
+
+  public getPlayer(gameState: any) {
+    return gameState.players.find((e) => e.name === 'DoubleAces');
   }
 };
 
