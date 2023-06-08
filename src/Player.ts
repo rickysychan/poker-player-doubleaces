@@ -49,7 +49,7 @@ export class Player {
           }
 
           if (highCards.length === 2) {
-            betCallback(this.callAction(gameState));
+            betCallback(this.callAction(gameState) + (this.getPlayer(gameState).stack * 0.10));
             return;
           }
 
