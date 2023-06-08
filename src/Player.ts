@@ -36,7 +36,7 @@ export class Player {
           }
 
           if (highCards.length === 2) {
-            betCallback(this.callAction(gameState) + (this.getPlayer(gameState).stack * 0.10));
+            betCallback(this.callAction(gameState));
             return;
           }
 
@@ -45,7 +45,15 @@ export class Player {
         }
         
         if (this.hasLowCards(hole_cards)) {
-          if (this.canAffordBet(gameState)) {
+          if (this.canAffordBet(gameState, 5)) {
+            betCallback(this.callAction(gameState));
+          } else {
+            betCallback(0);
+          }
+        }
+
+        if (this.hasMediocreAtBestCards(hole_cards)) {
+          if (this.canAffordBet(gameState, 10)) {
             betCallback(this.callAction(gameState));
           } else {
             betCallback(0);
@@ -208,13 +216,17 @@ export class Player {
     return hole_cards[0].rank <= 5 || hole_cards[1].rank <= 5;
   }
 
-  public canAffordBet(gameState) {
+  public canAffordBet(gameState, percent) {
     const defaultCallAmt = gameState.current_buy_in - gameState.players[gameState.in_action][gameState.bet];
 
     var player = this.getPlayer(gameState);
-    if ((player.stack / defaultCallAmt) * 100 <= 5) {
+    if ((player.stack / defaultCallAmt) * 100 <= percent) {
       return true;
     }
+  }
+  
+  public hasMediocreAtBestCards(hole_cards) {
+    return (hole_cards[0].rank >= 5 && hole_cards[0].rank <= 9) && (hole_cards[1].rank >= 5 && hole_cards[0].rank <= 9)
   }
 };
 
