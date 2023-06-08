@@ -44,6 +44,14 @@ export class Player {
       return stack / 4;
     }
   }
+  
+  public raiseAction(gameState: any) {
+    return gameState.current_buy_in - gameState.players[gameState.in_action][gameState.bet] + gameState.minimum_raise;
+  }
+
+  public callAction(gameState: any) {
+    return gameState.current_buy_in - gameState.players[gameState.in_action][gameState.bet];
+  }
 };
 
 export default Player;
