@@ -20,19 +20,6 @@ export class Player {
           betCallback(this.betOnPocketPairs(gameState, holeRank));
           return;
         }
-        
-        if((hole_cards[0].rank = 2 && hole_cards[1].rank <= 7) || (hole_cards[0].rank = 7 && hole_cards[1].rank <= 2)) {
-          betCallback(0);
-          return;
-        }
-        if((hole_cards[0].rank = 2 && hole_cards[1].rank <= 8) || (hole_cards[0].rank = 8 && hole_cards[1].rank <= 2)) {
-          betCallback(0);
-          return;
-        }
-        if((hole_cards[0].rank = 2 && hole_cards[1].rank <= 9) || (hole_cards[0].rank = 9 && hole_cards[1].rank <= 2)) {
-          betCallback(0);
-          return;
-        }
 
         if (this.hasHighCard(hole_cards)) {
           var highCards = hole_cards.filter((card) => FACE_CARDS.includes(card.rank));
