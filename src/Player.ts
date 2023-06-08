@@ -19,6 +19,20 @@ export class Player {
         betCallback(this.betOnPocketPairs(holeRank, doubleAcePlayer.stack));
         return;
       }
+
+      if (this.hasHighCard(hole_cards)) {
+        var highCards = hole_cards.filter((card) => FACE_CARDS.includes(card.rank));
+        if (highCards.length === 1) {
+
+        }
+
+        if (highCards.length === 2) {
+          this.callAction(gameState);
+        }
+
+        betCallback(this.betOnPocketPairs(holeRank, doubleAcePlayer.stack));
+        return;
+      }
     }
     // find max bet of a player and call or bet 250
     betCallback(250);
@@ -30,6 +44,10 @@ export class Player {
 
   public hasPocketPairs(cards: Card[]) {
     return cards[0].rank === cards[1].rank;
+  }
+
+  public hasHighCard(cards: Card[]) {
+    return FACE_CARDS.includes(cards[0].rank) || FACE_CARDS.includes(cards[1].rank);
   }
 
   public betOnPocketPairs(holeRank: string, stack: number): number {
