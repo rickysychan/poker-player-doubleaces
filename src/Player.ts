@@ -40,6 +40,14 @@ export class Player {
           betCallback(0);
           return;
         }
+        
+        if (this.hasLowCards(hole_cards)) {
+          if (this.canAffordBet(gameState)) {
+            betCallback(this.callAction(gameState));
+          } else {
+            betCallback(0);
+          }
+        }
       } else if (community_cards.length >= 3) {
         var bet = this.checkAllCards(gameState, hole_cards, community_cards);
         betCallback(bet);
@@ -187,6 +195,19 @@ export class Player {
 
   public areSuited(hole_cards) {
     return hole_cards[0].suit === hole_cards[1].suit;
+  }
+  
+  public hasLowCards(hole_cards) {
+    return hole_cards[0].rank <= 4 && hole_cards[1].rank <= 4;
+  }
+
+  public canAffordBet(gameState) {
+    const defaultCallAmt = gameState.current_buy_in - gameState.players[gameState.in_action][gameState.bet];
+
+    var player = this.getPlayer(gameState);
+    if ((player.stack / defaultCallAmt) * 100 <= 5) {
+      return true;
+    }
   }
 };
 
