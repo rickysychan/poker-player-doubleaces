@@ -156,22 +156,26 @@ export class Player {
 
   public raiseAction(gameState: any) {
     const defaultRaiseAmt = gameState.current_buy_in - gameState.players[gameState.in_action][gameState.bet] + gameState.minimum_raise;
-
+    console.log("defaultRaiseAmt", defaultRaiseAmt);
     var player = this.getPlayer(gameState);
     if (defaultRaiseAmt >= player.stack) {
+      console.log("Raise Betting: Stack ", player.stack);
       return player.stack;
     } else {
+      console.log("Raise Betting: defaultRaiseAmt ", defaultRaiseAmt);
       return defaultRaiseAmt;
     }
   }
 
   public callAction(gameState: any) {
     const defaultCallAmt = gameState.current_buy_in - gameState.players[gameState.in_action][gameState.bet];
-
+    console.log("defaultCallAmt", defaultCallAmt);
     var player = this.getPlayer(gameState);
     if (defaultCallAmt >= player.stack) {
       return player.stack;
+            console.log("Call Betting: Stack ", player.stack);
     } else {
+            console.log("Call Betting: defaultRaiseAmt ", defaultRaiseAmt);
       return defaultCallAmt;
     }
   }
