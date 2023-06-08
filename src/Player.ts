@@ -154,7 +154,7 @@ export class Player {
     const defaultRaiseAmt = gameState.current_buy_in - gameState.players[gameState.in_action][gameState.bet] + gameState.minimum_raise;
 
     var player = this.getPlayer(gameState);
-    if (defaultRaiseAmt <= player.stack) {
+    if (defaultRaiseAmt >= player.stack) {
       return player.stack;
     } else {
       return defaultRaiseAmt;
@@ -165,7 +165,7 @@ export class Player {
     const defaultCallAmt = gameState.current_buy_in - gameState.players[gameState.in_action][gameState.bet];
 
     var player = this.getPlayer(gameState);
-    if (defaultCallAmt <= player.stack) {
+    if (defaultCallAmt >= player.stack) {
       return player.stack;
     } else {
       return defaultCallAmt;
