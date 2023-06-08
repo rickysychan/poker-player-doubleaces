@@ -24,14 +24,7 @@ export class Player {
         if (this.hasHighCard(hole_cards)) {
           var highCards = hole_cards.filter((card) => FACE_CARDS.includes(card.rank));
           if (highCards.length === 1) {
-              if (this.hasOneLowCards(hole_cards)) {
-                if (this.canAffordBet(gameState)) {
-                  betCallback(this.callAction(gameState));
-                } else {
-                  betCallback(0);
-                }
-              }
-              betCallback(this.callAction(gameState));
+            betCallback(this.callAction(gameState));
             return;
           }
 
@@ -43,7 +36,7 @@ export class Player {
           betCallback(0);
           return;
         }
-        
+
         if (this.hasLowCards(hole_cards)) {
           if (this.canAffordBet(gameState, 5)) {
             betCallback(this.callAction(gameState));
@@ -64,7 +57,7 @@ export class Player {
         betCallback(bet);
         return;
       }
-    } catch(err) {
+    } catch (err) {
       console.log('!!!ERROR: ', err);
     }
 
@@ -75,13 +68,13 @@ export class Player {
     const arr = hole_cards.concat(community_cards);
     const results = arr.reduce((obj, item) => {
       obj[item.suit] = obj[item.suit] || 0;
-      obj[item.suit]++;       
+      obj[item.suit]++;
       return obj;
     }, {});
-      
-    return results['spades'] == 5 
-      || results['hearts'] == 5 
-      || results['diamonds'] == 5 
+
+    return results['spades'] == 5
+      || results['hearts'] == 5
+      || results['diamonds'] == 5
       || results['clubs'] == 5;
   }
 
@@ -99,7 +92,7 @@ export class Player {
       return this.getPlayer(gameState).stack;
     }
 
-    if(this.isThreeOfAKind(rankToCountMap)) {
+    if (this.isThreeOfAKind(rankToCountMap)) {
       return this.getPlayer(gameState).stack;
     }
 
@@ -187,15 +180,15 @@ export class Player {
   }
 
   public callAction(gameState: any) {
-    
+
     const defaultCallAmt = gameState.current_buy_in - gameState.players[gameState.in_action].bet;
     console.log("defaultCallAmt", defaultCallAmt);
     var player = this.getPlayer(gameState);
     if (defaultCallAmt >= player.stack) {
       return player.stack;
-            console.log("Call Betting: Stack ", player.stack);
+      console.log("Call Betting: Stack ", player.stack);
     } else {
-            console.log("Call Betting: defaultCallAmt ", defaultCallAmt);
+      console.log("Call Betting: defaultCallAmt ", defaultCallAmt);
       return defaultCallAmt;
     }
   }
@@ -207,13 +200,9 @@ export class Player {
   public areSuited(hole_cards) {
     return hole_cards[0].suit === hole_cards[1].suit;
   }
-  
+
   public hasLowCards(hole_cards) {
-    return hole_cards[0].rank <= 5 && hole_cards[1].rank <= 5;
-  }
-  
-  public hasOneLowCards(hole_cards) {
-    return hole_cards[0].rank <= 5 || hole_cards[1].rank <= 5;
+    return hole_cards[0].rank <= 4 && hole_cards[1].rank <= 4;
   }
 
   public canAffordBet(gameState, percent) {
@@ -224,7 +213,7 @@ export class Player {
       return true;
     }
   }
-  
+
   public hasMediocreAtBestCards(hole_cards) {
     return (hole_cards[0].rank >= 5 && hole_cards[0].rank <= 9) && (hole_cards[1].rank >= 5 && hole_cards[0].rank <= 9)
   }
