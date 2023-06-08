@@ -96,7 +96,7 @@ export class Player {
       return this.getPlayer(gameState).stack;
     }
 
-    if (this.canAffordBet(gameState)) {
+    if (this.canAffordBet(gameState, 10) {
       return this.callAction(gameState);
     } 
     return 0;
