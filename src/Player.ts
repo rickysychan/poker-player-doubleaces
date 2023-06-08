@@ -49,6 +49,7 @@ export class Player {
   }
   
   public isFlush(hole_cards: Card[], community_cards: Card[]): boolean {
+    const arr = hole_cards.concat(community_cards);
     const results = arr.reduce((obj, item) => {
       obj[item.suit] = obj[item.suit] || 0;
       obj[item.suit]++;       
