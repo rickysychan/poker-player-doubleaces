@@ -23,14 +23,20 @@ export class Player {
       if (this.hasHighCard(hole_cards)) {
         var highCards = hole_cards.filter((card) => FACE_CARDS.includes(card.rank));
         if (highCards.length === 1) {
+          if (this.areSuited(hole_cards)) {
+            this.callAction(gameState);
+          }
 
+          if (this.areNotSuited(hole_cards)) {
+            betCallback(0);
+          }
         }
 
         if (highCards.length === 2) {
           this.callAction(gameState);
         }
 
-        betCallback(this.betOnPocketPairs(holeRank, doubleAcePlayer.stack));
+        betCallback(0);
         return;
       }
     }
@@ -82,6 +88,14 @@ export class Player {
 
   public getPlayer(gameState: any) {
     return gameState.players.find((e) => e.name === 'DoubleAces');
+  }
+  
+  public areSuited(hole_cards) {
+    return hole_cards[0].suit === hole_cards[1].suit;
+  }
+
+  public areNotSuited(hole_cards) {
+    return hole_cards[0].suit !== hole_cards[1].suit;
   }
 };
 
