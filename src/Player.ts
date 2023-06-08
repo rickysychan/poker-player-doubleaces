@@ -4,7 +4,7 @@ interface Card {
 }
 
 const FACE_CARDS: string[] = ['10', 'J', 'Q', 'K', 'A'];
-  
+
 export class Player {
   public betRequest(gameState: any, betCallback: (bet: number) => void): void {
     console.log('Game State: ', gameState);
@@ -47,7 +47,7 @@ export class Player {
 
     betCallback(250);
   }
-  
+
   public isFlush(hole_cards: Card[], community_cards: Card[]): boolean {
     const arr = hole_cards.concat(community_cards);
     const results = arr.reduce((obj, item) => {
@@ -63,11 +63,71 @@ export class Player {
   }
 
   public checkAllCards(gameState: any, hole_cards: Card[], community_cards: Card[]): number {
+    var rankToCountMap = this.getRankToCountMap(hole_cards.concat(community_cards));
+    if (this.isFourOfAKind(rankToCountMap)) {
+      return this.getPlayer(gameState).stack;
+    }
+
+    if (this.isFullHouse(rankToCountMap)) {
+      return this.getPlayer(gameState).stack;
+    }
+
     if (this.isFlush(hole_cards, community_cards)) {
       return this.getPlayer(gameState).stack;
     }
-    
-    return 250; //TODO: Change this!!!
+
+    if(this.isThreeOfAKind(rankToCountMap)) {
+      return this.getPlayer(gameState).stack;
+    }
+
+    return this.callAction(gameState); //TODO: Change this!!!
+  }
+
+  private getRankToCountMap(cards: Card[]) {
+    var rankToCountMap = {};
+    cards.forEach(function (card: Card) { rankToCountMap[card.rank] = (rankToCountMap[card.rank] || 0) + 1; });
+    return rankToCountMap;
+  }
+
+  private isFullHouse(rankToCountMap) {
+    var hasThreeCards = false;
+    var hasTwoCards = false;
+    for (let [k, v] of Object.entries(rankToCountMap)) {
+      if (v === 3 && !hasThreeCards) {
+        hasThreeCards = true;
+      }
+      if (v === 2 && !hasTwoCards) {
+        hasTwoCards = true;
+      }
+    }
+
+    console.log("hasThreeCards", hasThreeCards);
+    console.log("hasTwoCards", hasTwoCards);
+    return hasThreeCards && hasTwoCards;
+  }
+
+  private isFourOfAKind(rankToCountMap) {
+    var hasFourCards = false;
+    for (let [k, v] of Object.entries(rankToCountMap)) {
+      if (v === 4 && !hasFourCards) {
+        hasFourCards = true;
+      }
+    }
+
+    console.log("hasFourCards", hasFourCards);
+    return hasFourCards;
+  }
+
+  private isThreeOfAKind(rankToCountMap) {
+    var hasThreeCards = false;
+    for (let [k, v] of Object.entries(rankToCountMap)) {
+      if (v === 3 && !hasThreeCards) {
+        hasThreeCards = true;
+      }
+    }
+
+    console.log("hasThreeCards", hasThreeCards);
+    return hasThreeCards;
   }
 
   public showdown(gameState: any): void {
@@ -89,10 +149,10 @@ export class Player {
       return this.callAction(gameState)
     }
   }
-  
+
   public raiseAction(gameState: any) {
     const defaultRaiseAmt = gameState.current_buy_in - gameState.players[gameState.in_action][gameState.bet] + gameState.minimum_raise;
-    
+
     var player = this.getPlayer(gameState);
     if (defaultRaiseAmt <= player.stack) {
       return player.stack;
@@ -115,7 +175,7 @@ export class Player {
   public getPlayer(gameState: any) {
     return gameState.players.find((e) => e.name === 'DoubleAces');
   }
-  
+
   public areSuited(hole_cards) {
     return hole_cards[0].suit === hole_cards[1].suit;
   }
