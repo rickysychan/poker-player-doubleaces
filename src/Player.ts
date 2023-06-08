@@ -24,11 +24,7 @@ export class Player {
         if (this.hasHighCard(hole_cards)) {
           var highCards = hole_cards.filter((card) => FACE_CARDS.includes(card.rank));
           if (highCards.length === 1) {
-            if (this.areSuited(hole_cards)) {
               betCallback(this.callAction(gameState));
-            } else {
-              betCallback(0);
-            }
             return;
           }
 
