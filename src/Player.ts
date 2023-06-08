@@ -24,22 +24,31 @@ export class Player {
         var highCards = hole_cards.filter((card) => FACE_CARDS.includes(card.rank));
         if (highCards.length === 1) {
           if (this.areSuited(hole_cards)) {
-            this.callAction(gameState);
+            betCallback(this.callAction(gameState));
+          } else {
+            betCallback(0);
           }
-
-           betCallback(0);
+          return;
         }
 
         if (highCards.length === 2) {
-          this.callAction(gameState);
+          betCallback(this.callAction(gameState));
+          return;
         }
 
         betCallback(0);
         return;
       }
+    } else if (community_cards.length >= 3) {
+      var bet = this.checkAllCards(hole_cards, community_cards);
+      betCallback(bet);
     }
 
     betCallback(250);
+  }
+
+  public checkAllCards(hole_cards: Card[], community_cards: Card[]): number {
+    return 250; //TODO: Change this!!!
   }
 
   public showdown(gameState: any): void {
