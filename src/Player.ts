@@ -53,7 +53,7 @@ export class Player {
       console.log('!!!ERROR: ', err);
     }
 
-    betCallback(250);
+    betCallback(this.callAction(gameState));
   }
 
   public isFlush(hole_cards: Card[], community_cards: Card[]): boolean {
